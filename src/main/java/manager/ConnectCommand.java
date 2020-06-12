@@ -33,6 +33,7 @@ public class ConnectCommand implements Runnable, ExitCodeGenerator {
     @Override
     public void run() {
         System.out.println("Launching shell...");
+        ShellCommand.main(new String[] {});
     }
 
     @Override
