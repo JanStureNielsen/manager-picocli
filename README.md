@@ -19,3 +19,8 @@ java -jar target/*.jar -u bob -p 123 @commands   # run every command in `command
 java -jar target/*.jar -u bob -p 123             # run shell
 
 ```
+
+# Discussions
+
+I posted a [question on Stackoverflow](https://stackoverflow.com/questions/62334604/parsing-multiple-picocli-sub-commands-and-a-shell) 
+and on [picocli's Google Group](https://groups.google.com/forum/?utm_medium=email&utm_source=footer#!msg/picocli/KEeSxrX7y2Q/-hijfys5BAAJ).
