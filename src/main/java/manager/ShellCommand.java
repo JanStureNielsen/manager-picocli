@@ -33,6 +33,9 @@ import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
 import picocli.CommandLine.ParentCommand;
 
+//
+// from https://github.com/remkop/picocli/tree/master/picocli-shell-jline3
+//
 public class ShellCommand {
     /**
      * Top-level command that just prints help.
@@ -45,7 +48,13 @@ public class ShellCommand {
                     ""},
             footer = {"", "Press Ctl-D to exit."},
             subcommands = {
-                    MyCommand.class, ClearScreen.class, CommandLine.HelpCommand.class})
+                ListCommand.class,
+                CreateCommand.class,
+                DeleteCommand.class,
+                MyCommand.class,
+                ClearScreen.class,
+                CommandLine.HelpCommand.class
+            })
     static class CliCommands implements Runnable {
         LineReaderImpl reader;
         PrintWriter out;
@@ -181,7 +190,7 @@ public class ShellCommand {
             KeyMap<Binding> keyMap = reader.getKeyMaps().get("main");
             keyMap.bind(new Reference("tailtip-toggle"), KeyMap.alt("s"));
 
-            String prompt = "prompt> ";
+            String prompt = "manager> ";
             String rightPrompt = null;
 
             // start the shell and process input until the user quits with Ctrl-D
