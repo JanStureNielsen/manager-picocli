@@ -41,20 +41,20 @@ public class ShellCommand {
      * Top-level command that just prints help.
      */
     @Command(name = "",
-            description = {
-                    "Example interactive shell with completion and autosuggestions. " +
-                            "Hit @|magenta <TAB>|@ to see available commands.",
-                            "Hit @|magenta ALT-S|@ to toggle tailtips.",
-                    ""},
-            footer = {"", "Press Ctl-D to exit."},
-            subcommands = {
-                ListCommand.class,
-                CreateCommand.class,
-                DeleteCommand.class,
-                MyCommand.class,
-                ClearScreen.class,
-                CommandLine.HelpCommand.class
-            })
+        description = {
+            "Example interactive shell with completion and autosuggestions. " +
+                    "Hit @|magenta <TAB>|@ to see available commands.",
+                    "Hit @|magenta ALT-S|@ to toggle tailtips.",
+            ""},
+        footer = {"", "Press Ctl-D to exit."},
+        subcommands = {
+            ListCommand.class,
+            CreateCommand.class,
+            DeleteCommand.class,
+            MyCommand.class,
+            ClearScreen.class,
+            CommandLine.HelpCommand.class
+        })
     static class CliCommands implements Runnable {
         LineReaderImpl reader;
         PrintWriter out;
@@ -74,13 +74,22 @@ public class ShellCommand {
     /**
      * A command with some options to demonstrate completion.
      */
-    @Command(name = "cmd", mixinStandardHelpOptions = true, version = "1.0",
-            description = {"Command with some options to demonstrate TAB-completion.",
-                    " (Note that enum values also get completed.)"},
-            subcommands = {Nested.class, CommandLine.HelpCommand.class})
+    @Command(
+        name = "cmd",
+        mixinStandardHelpOptions = true,
+        version = "1.0",
+        description = {
+             "Command with some options to demonstrate TAB-completion.",
+             " (Note that enum values also get completed.)"
+        },
+        subcommands = {
+            Nested.class,
+            CommandLine.HelpCommand.class
+        })
     static class MyCommand implements Runnable {
-        @Option(names = {"-v", "--verbose"},
-                description = { "Specify multiple -v options to increase verbosity.",
+        @Option(
+            names = {"-v", "--verbose"},
+            description = { "Specify multiple -v options to increase verbosity.",
                         "For example, `-v -v -v` or `-vvv`"})
         private boolean[] verbosity = {};
 
