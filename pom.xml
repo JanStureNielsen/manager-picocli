@@ -17,11 +17,11 @@
         <relativePath /> <!-- lookup parent from repository -->
     </parent>
 
-    <artifactId>cli-picocli</artifactId>
+    <artifactId>manager-picocli</artifactId>
     <packaging>jar</packaging>
 
-    <name>Terminal::Terminal Client</name>
-    <description>Terminal client.</description>
+    <name>Manager picocli</name>
+    <description>Manager application.</description>
 
     <dependencies>
 
