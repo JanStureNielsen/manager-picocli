@@ -1,18 +1,24 @@
 package manager;
 
+import javax.validation.constraints.NotNull;
+
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.ExitCodeGenerator;
 import org.springframework.stereotype.Component;
 
+import lombok.RequiredArgsConstructor;
 import picocli.CommandLine;
+import picocli.CommandLine.IFactory;
 
-@Component
+@Component @RequiredArgsConstructor
 public class ApplicationRunner implements CommandLineRunner, ExitCodeGenerator {
-    private int exitCode;
+	private final @NotNull ConnectCommand connectCommand;
+	private final @NotNull IFactory picocliFactory;
+	private int exitCode;
 
     @Override
     public void run(String... args) throws Exception {
-        exitCode = new CommandLine(new ConnectCommand()).execute(args);
+        exitCode = new CommandLine(connectCommand, picocliFactory).execute(args);
     }
 
     @Override
