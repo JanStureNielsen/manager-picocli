@@ -26,7 +26,13 @@ import org.jline.reader.impl.DefaultParser;
 import org.jline.reader.impl.LineReaderImpl;
 import org.jline.terminal.Terminal;
 import org.jline.terminal.TerminalBuilder;
+import org.springframework.boot.ExitCodeGenerator;
+import org.springframework.stereotype.Component;
 
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import manager.ShellCommand.ClearScreen;
+import manager.ShellCommand.MyCommand;
 import picocli.CommandLine;
 import picocli.CommandLine.ArgGroup;
 import picocli.CommandLine.Command;
@@ -36,39 +42,36 @@ import picocli.CommandLine.ParentCommand;
 //
 // from https://github.com/remkop/picocli/tree/master/picocli-shell-jline3
 //
-public class ShellCommand {
-    /**
-     * Top-level command that just prints help.
-     */
-    @Command(name = "",
-        description = {
-            "Example interactive shell with completion and autosuggestions. " +
-                    "Hit @|magenta <TAB>|@ to see available commands.",
-                    "Hit @|magenta ALT-S|@ to toggle tailtips.",
-            ""},
-        footer = {"", "Press Ctl-D to exit."},
-        subcommands = {
-            ListCommand.class,
-            CreateCommand.class,
-            DeleteCommand.class,
-            MyCommand.class,
-            ClearScreen.class,
-            CommandLine.HelpCommand.class
-        })
-    static class CliCommands implements Runnable {
-        LineReaderImpl reader;
-        PrintWriter out;
+@Command(name = "",
+description = {
+    "Example interactive shell with completion and autosuggestions. " +
+            "Hit @|magenta <TAB>|@ to see available commands.",
+            "Hit @|magenta ALT-S|@ to toggle tailtips.",
+    ""},
+footer = {"", "Press Ctl-D to exit."},
+subcommands = {
+    ListCommand.class,
+    CreateCommand.class,
+    DeleteCommand.class,
+    MyCommand.class,
+    ClearScreen.class,
+    CommandLine.HelpCommand.class
+})
+@Component @RequiredArgsConstructor @Getter
+public class ShellCommand  implements Runnable, ExitCodeGenerator {
+    private LineReaderImpl reader;
+    private PrintWriter out;
 
-        CliCommands() {}
+	private int exitCode;
 
-        public void setReader(LineReader reader){
-            this.reader = (LineReaderImpl)reader;
-            out = reader.getTerminal().writer();
-        }
+    @Override
+    public int getExitCode() {
+        return exitCode;
+    }
 
-        public void run() {
-            out.println(new CommandLine(this).getUsageMessage());
-        }
+    public void setReader(LineReader reader){
+        this.reader = (LineReaderImpl)reader;
+        out = reader.getTerminal().writer();
     }
 
     /**
@@ -108,7 +111,7 @@ public class ShellCommand {
             private TimeUnit unit;
         }
 
-        @ParentCommand CliCommands parent;
+        @ParentCommand ShellCommand parent;
 
         public void run() {
             if (verbosity.length > 0) {
@@ -156,7 +159,7 @@ public class ShellCommand {
             description = "Clears the screen", version = "1.0")
     static class ClearScreen implements Callable<Void> {
 
-        @ParentCommand CliCommands parent;
+        @ParentCommand ShellCommand parent;
 
         public Void call() throws IOException {
             parent.reader.clearScreen();
@@ -168,7 +171,11 @@ public class ShellCommand {
         return Paths.get(System.getProperty("user.dir"));
     }
 
-    public static void main(String[] args) {
+    @Override
+    public void run() {
+        ShellCommand commands = new ShellCommand();
+        CommandLine cmd = new CommandLine(commands);
+
         AnsiConsole.systemInstall();
         try {
             // set up JLine built-in commands
@@ -177,9 +184,7 @@ public class ShellCommand {
             builtins.alias("zle", "widget");
             builtins.alias("bindkey", "keymap");
             // set up picocli commands
-            CliCommands commands = new CliCommands();
-            CommandLine cmd = new CommandLine(commands);
-            ApplicationCommands picocliCommands = new ApplicationCommands(ShellCommand::workDir, cmd);
+            ShellCommands picocliCommands = new ShellCommands(ShellCommand::workDir, cmd);
 
             Parser parser = new DefaultParser();
             Terminal terminal = TerminalBuilder.builder().build();

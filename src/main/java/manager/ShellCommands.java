@@ -22,6 +22,7 @@ import org.jline.reader.LineReader;
 import org.jline.reader.ParsedLine;
 import org.jline.reader.impl.completer.SystemCompleter;
 import org.jline.utils.AttributedString;
+import org.springframework.stereotype.Component;
 
 import lombok.NoArgsConstructor;
 import picocli.CommandLine;
@@ -29,14 +30,14 @@ import picocli.CommandLine.Help;
 import picocli.CommandLine.Model.CommandSpec;
 import picocli.CommandLine.Model.OptionSpec;
 
-//@Component
-public class ApplicationCommands implements CommandRegistry {
-    private final @NotNull Supplier<Path> workDir;
-    private final @NotNull CommandLine cmd;
-    private final @NotNull Set<String> commands;
-    private final @NotNull Map<String, String> aliasCommands = new HashMap<>();
+@Component @NoArgsConstructor
+public class ShellCommands implements CommandRegistry {
+    private @NotNull Supplier<Path> workDir;
+    private @NotNull CommandLine cmd;
+    private @NotNull Set<String> commands;
+    private @NotNull Map<String, String> aliasCommands = new HashMap<>();
 
-    public ApplicationCommands(Supplier<Path> workDir, CommandLine cmd) {
+    public ShellCommands(Supplier<Path> workDir, CommandLine cmd) {
         this.workDir = workDir;
         this.cmd = cmd;
 

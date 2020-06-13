@@ -1,9 +1,14 @@
 package manager;
 
+import javax.validation.constraints.NotNull;
+
 import org.springframework.boot.ExitCodeGenerator;
 import org.springframework.stereotype.Component;
 
+import lombok.RequiredArgsConstructor;
+import picocli.CommandLine;
 import picocli.CommandLine.Command;
+import picocli.CommandLine.IFactory;
 import picocli.CommandLine.Option;
 
 @Command(
@@ -16,8 +21,11 @@ import picocli.CommandLine.Option;
         CreateCommand.class,
         DeleteCommand.class
     })
-@Component
+@Component @RequiredArgsConstructor
 public class ConnectCommand implements Runnable, ExitCodeGenerator {
+	private final @NotNull ShellCommand shell;
+	private final @NotNull IFactory picocliFactory;
+
     @Option(
         names        = {"-u", "--username"},
         description  = "username...")
@@ -33,7 +41,8 @@ public class ConnectCommand implements Runnable, ExitCodeGenerator {
     @Override
     public void run() {
         System.out.println("Launching shell...");
-        ShellCommand.main(new String[] {});
+
+        exitCode = new CommandLine(shell, picocliFactory).execute(new String[] {});
     }
 
     @Override
