@@ -5,11 +5,9 @@ import org.springframework.stereotype.Component;
 import picocli.CommandLine.Command;
 
 @Command(
-    name = "ls",
-    aliases = "list",
+    name = "list",
     description = "List stuff...",
-    mixinStandardHelpOptions = true,
-    header = "list stuff...")
+    mixinStandardHelpOptions = true)
 @Component
 class ListCommand implements Runnable{
     @Override
