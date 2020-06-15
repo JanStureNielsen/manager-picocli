@@ -7,6 +7,8 @@ import java.nio.file.Paths;
 import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
 
+import javax.validation.constraints.NotNull;
+
 import org.fusesource.jansi.AnsiConsole;
 import org.jline.builtins.Builtins;
 import org.jline.builtins.SystemRegistry;
@@ -59,6 +61,7 @@ subcommands = {
 })
 @Component @RequiredArgsConstructor @Getter
 public class ShellCommand  implements Runnable, ExitCodeGenerator {
+    private final @NotNull ShellCommands commands;
     private LineReaderImpl reader;
     private PrintWriter out;
 
@@ -173,8 +176,7 @@ public class ShellCommand  implements Runnable, ExitCodeGenerator {
 
     @Override
     public void run() {
-        ShellCommand commands = new ShellCommand();
-        CommandLine cmd = new CommandLine(commands);
+        CommandLine cmd = new CommandLine(this);
 
         AnsiConsole.systemInstall();
         try {
@@ -199,7 +201,7 @@ public class ShellCommand  implements Runnable, ExitCodeGenerator {
                     .variable(LineReader.LIST_MAX, 50)   // max tab completion candidates
                     .build();
             builtins.setLineReader(reader);
-            commands.setReader(reader);
+            setReader(reader);
             new TailTipWidgets(reader, systemRegistry::commandDescription, 5, TipType.COMPLETER);
             KeyMap<Binding> keyMap = reader.getKeyMaps().get("main");
             keyMap.bind(new Reference("tailtip-toggle"), KeyMap.alt("s"));
