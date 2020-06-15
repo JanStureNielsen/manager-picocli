@@ -52,6 +52,10 @@ public class ShellCommand  implements Runnable, ExitCodeGenerator {
 
 	private int exitCode;
 
+    private static Path workDir() {
+        return Paths.get(System.getProperty("user.dir"));
+    }
+
     @Override
     public int getExitCode() {
         return exitCode;
@@ -112,10 +116,6 @@ public class ShellCommand  implements Runnable, ExitCodeGenerator {
     public void setReader(LineReader reader){
         this.reader = (LineReaderImpl)reader;
         out = reader.getTerminal().writer();
-    }
-
-    private static Path workDir() {
-        return Paths.get(System.getProperty("user.dir"));
     }
 
 }
