@@ -12,8 +12,9 @@ import picocli.CommandLine.IFactory;
 
 @Component @RequiredArgsConstructor
 public class ApplicationRunner implements CommandLineRunner, ExitCodeGenerator {
+    private final @NotNull IFactory picocliFactory;
 	private final @NotNull ConnectCommand connectCommand;
-	private final @NotNull IFactory picocliFactory;
+
 	private int exitCode;
 
     @Override
