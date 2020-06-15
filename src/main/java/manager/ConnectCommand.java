@@ -24,7 +24,7 @@ import picocli.CommandLine.Option;
 @Component @RequiredArgsConstructor
 public class ConnectCommand implements Runnable, ExitCodeGenerator {
     private final @NotNull IFactory picocliFactory;
-	private final @NotNull ShellCommand shell;
+    private final @NotNull ShellCommand shell;
 
     @Option(
         names        = {"-u", "--username"},
