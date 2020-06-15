@@ -15,7 +15,7 @@ import picocli.AutoComplete;
 import picocli.CommandLine.Model.CommandSpec;
 
 @RequiredArgsConstructor //@Component
-public class CommandCompleter implements Completer {
+public class ShellCommandCompleter implements Completer {
     private final @NotNull CommandSpec commandSpec;
 
     /**
