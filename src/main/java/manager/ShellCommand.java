@@ -50,7 +50,7 @@ public class ShellCommand  implements Runnable, ExitCodeGenerator {
     private LineReaderImpl reader;
     private PrintWriter out;
 
-	private int exitCode;
+    private int exitCode;
 
     private static Path workDir() {
         return Paths.get(System.getProperty("user.dir"));
