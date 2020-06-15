@@ -31,13 +31,13 @@ import picocli.CommandLine.Model.CommandSpec;
 import picocli.CommandLine.Model.OptionSpec;
 
 @Component @NoArgsConstructor
-public class ShellCommands implements CommandRegistry {
+public class ShellCommandRegistry implements CommandRegistry {
     private @NotNull Supplier<Path> workDir;
     private @NotNull CommandLine cmd;
     private @NotNull Set<String> commands;
     private @NotNull Map<String, String> aliasCommands = new HashMap<>();
 
-    public ShellCommands(Supplier<Path> workDir, CommandLine cmd) {
+    public ShellCommandRegistry(Supplier<Path> workDir, CommandLine cmd) {
         this.workDir = workDir;
         this.cmd = cmd;
 

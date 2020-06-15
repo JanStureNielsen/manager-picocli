@@ -61,7 +61,7 @@ subcommands = {
 })
 @Component @RequiredArgsConstructor @Getter
 public class ShellCommand  implements Runnable, ExitCodeGenerator {
-    private final @NotNull ShellCommands commands;
+    private final @NotNull ShellCommandRegistry commands;
     private LineReaderImpl reader;
     private PrintWriter out;
 
@@ -186,7 +186,7 @@ public class ShellCommand  implements Runnable, ExitCodeGenerator {
             builtins.alias("zle", "widget");
             builtins.alias("bindkey", "keymap");
             // set up picocli commands
-            ShellCommands picocliCommands = new ShellCommands(ShellCommand::workDir, cmd);
+            ShellCommandRegistry picocliCommands = new ShellCommandRegistry(ShellCommand::workDir, cmd);
 
             Parser parser = new DefaultParser();
             Terminal terminal = TerminalBuilder.builder().build();
