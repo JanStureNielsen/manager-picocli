@@ -96,7 +96,7 @@ public class ShellCommand  implements Runnable, ExitCodeGenerator {
                 try {
                     systemRegistry.cleanUp();
                     line = reader.readLine(prompt, rightPrompt, (MaskingCallback) null, null);
-                    Object result = systemRegistry.execute(line);
+                    systemRegistry.execute(line);
                 } catch (UserInterruptException e) {
                     // Ignore
                 } catch (EndOfFileException e) {
