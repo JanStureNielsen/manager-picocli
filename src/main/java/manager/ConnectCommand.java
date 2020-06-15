@@ -13,7 +13,7 @@ import picocli.CommandLine.Option;
 
 @Command(
     name = "manager",
-    description = "The manager CLI and shell...",
+    description = "Manager CLI and shell for managing stuff with minimal fuss...",
     showAtFileInUsageHelp = true,
     mixinStandardHelpOptions = true,
     subcommands = {
