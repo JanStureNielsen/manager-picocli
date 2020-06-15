@@ -6,7 +6,7 @@ import picocli.CommandLine.Command;
 
 @Command(
     name = "list",
-    description = "List stuff...",
+    description = "List some stuff with minimal fuss...",
     mixinStandardHelpOptions = true)
 @Component
 class ListCommand implements Runnable{
