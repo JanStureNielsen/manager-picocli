@@ -72,6 +72,62 @@ public class ShellCommand  implements Runnable, ExitCodeGenerator {
         return exitCode;
     }
 
+    @Override
+    public void run() {
+        CommandLine cmd = new CommandLine(this);
+
+        AnsiConsole.systemInstall();
+        try {
+            // set up JLine built-in commands
+            Builtins builtins = new Builtins(ShellCommand::workDir, null, null);
+            builtins.rename(org.jline.builtins.Builtins.Command.TTOP, "top");
+            builtins.alias("zle", "widget");
+            builtins.alias("bindkey", "keymap");
+            // set up commands
+            ShellCommandRegistry shellCommands = new ShellCommandRegistry(ShellCommand::workDir, cmd);
+
+            Parser parser = new DefaultParser();
+            Terminal terminal = TerminalBuilder.builder().build();
+
+            SystemRegistry systemRegistry = new SystemRegistryImpl(parser, terminal, ShellCommand::workDir, null);
+            systemRegistry.setCommandRegistries(builtins, shellCommands);
+
+            LineReader reader = LineReaderBuilder.builder()
+                    .terminal(terminal)
+                    .completer(systemRegistry.completer())
+                    .parser(parser)
+                    .variable(LineReader.LIST_MAX, 50)   // max tab completion candidates
+                    .build();
+
+            builtins.setLineReader(reader);
+            setReader(reader);
+            new TailTipWidgets(reader, systemRegistry::commandDescription, 5, TipType.COMPLETER);
+            KeyMap<Binding> keyMap = reader.getKeyMaps().get("main");
+            keyMap.bind(new Reference("tailtip-toggle"), KeyMap.alt("s"));
+
+            String prompt = "manager> ";
+            String rightPrompt = null;
+
+            // start the shell and process input until the user quits with Ctrl-D
+            String line;
+            while (true) {
+                try {
+                    systemRegistry.cleanUp();
+                    line = reader.readLine(prompt, rightPrompt, (MaskingCallback) null, null);
+                    systemRegistry.execute(line);
+                } catch (UserInterruptException e) {
+                    // Ignore
+                } catch (EndOfFileException e) {
+                    return;
+                } catch (Exception e) {
+                    systemRegistry.trace(e);
+                }
+            }
+        } catch (Throwable t) {
+            t.printStackTrace();
+        }
+    }
+
     public void setReader(LineReader reader){
         this.reader = (LineReaderImpl)reader;
         out = reader.getTerminal().writer();
@@ -172,62 +228,6 @@ public class ShellCommand  implements Runnable, ExitCodeGenerator {
 
     private static Path workDir() {
         return Paths.get(System.getProperty("user.dir"));
-    }
-
-    @Override
-    public void run() {
-        CommandLine cmd = new CommandLine(this);
-
-        AnsiConsole.systemInstall();
-        try {
-            // set up JLine built-in commands
-            Builtins builtins = new Builtins(ShellCommand::workDir, null, null);
-            builtins.rename(org.jline.builtins.Builtins.Command.TTOP, "top");
-            builtins.alias("zle", "widget");
-            builtins.alias("bindkey", "keymap");
-            // set up commands
-            ShellCommandRegistry shellCommands = new ShellCommandRegistry(ShellCommand::workDir, cmd);
-
-            Parser parser = new DefaultParser();
-            Terminal terminal = TerminalBuilder.builder().build();
-
-            SystemRegistry systemRegistry = new SystemRegistryImpl(parser, terminal, ShellCommand::workDir, null);
-            systemRegistry.setCommandRegistries(builtins, shellCommands);
-
-            LineReader reader = LineReaderBuilder.builder()
-                    .terminal(terminal)
-                    .completer(systemRegistry.completer())
-                    .parser(parser)
-                    .variable(LineReader.LIST_MAX, 50)   // max tab completion candidates
-                    .build();
-
-            builtins.setLineReader(reader);
-            setReader(reader);
-            new TailTipWidgets(reader, systemRegistry::commandDescription, 5, TipType.COMPLETER);
-            KeyMap<Binding> keyMap = reader.getKeyMaps().get("main");
-            keyMap.bind(new Reference("tailtip-toggle"), KeyMap.alt("s"));
-
-            String prompt = "manager> ";
-            String rightPrompt = null;
-
-            // start the shell and process input until the user quits with Ctrl-D
-            String line;
-            while (true) {
-                try {
-                    systemRegistry.cleanUp();
-                    line = reader.readLine(prompt, rightPrompt, (MaskingCallback) null, null);
-                    systemRegistry.execute(line);
-                } catch (UserInterruptException e) {
-                    // Ignore
-                } catch (EndOfFileException e) {
-                    return;
-                } catch (Exception e) {
-                    systemRegistry.trace(e);
-                }
-            }
-        } catch (Throwable t) {
-            t.printStackTrace();
-        }
     }
 
 }
