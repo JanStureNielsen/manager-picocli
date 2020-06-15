@@ -6,7 +6,7 @@ import picocli.CommandLine.Command;
 
 @Command(
     name = "create",
-    description = "Create some stuff with minimal fuss.",
+    description = "Create some stuff with minimal fuss...",
     mixinStandardHelpOptions = true)
 @Component
 class CreateCommand implements Runnable{
