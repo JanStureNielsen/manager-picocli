@@ -7,7 +7,6 @@ import java.nio.file.Paths;
 import javax.validation.constraints.NotNull;
 
 import org.fusesource.jansi.AnsiConsole;
-import org.jline.builtins.Builtins;
 import org.jline.builtins.SystemRegistry;
 import org.jline.builtins.SystemRegistryImpl;
 import org.jline.builtins.Widgets.TailTipWidgets;
@@ -68,28 +67,21 @@ public class ShellCommand  implements Runnable, ExitCodeGenerator {
 
         AnsiConsole.systemInstall();
         try {
-            // set up JLine built-in commands
-            Builtins builtins = new Builtins(ShellCommand::workDir, null, null);
-            builtins.rename(org.jline.builtins.Builtins.Command.TTOP, "top");
-            builtins.alias("zle", "widget");
-            builtins.alias("bindkey", "keymap");
-            // set up commands
             ShellCommandRegistry shellCommands = new ShellCommandRegistry(ShellCommand::workDir, cmd);
 
             Parser parser = new DefaultParser();
             Terminal terminal = TerminalBuilder.builder().build();
 
             SystemRegistry systemRegistry = new SystemRegistryImpl(parser, terminal, ShellCommand::workDir, null);
-            systemRegistry.setCommandRegistries(builtins, shellCommands);
+            systemRegistry.setCommandRegistries(shellCommands);
 
             LineReader reader = LineReaderBuilder.builder()
                     .terminal(terminal)
                     .completer(systemRegistry.completer())
                     .parser(parser)
-                    .variable(LineReader.LIST_MAX, 50)   // max tab completion candidates
+                    .variable(LineReader.LIST_MAX, 60)   // max tab completion candidates
                     .build();
 
-            builtins.setLineReader(reader);
             setReader(reader);
             new TailTipWidgets(reader, systemRegistry::commandDescription, 5, TipType.COMPLETER);
             KeyMap<Binding> keyMap = reader.getKeyMaps().get("main");
