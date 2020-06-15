@@ -22,7 +22,6 @@ import org.jline.reader.LineReader;
 import org.jline.reader.ParsedLine;
 import org.jline.reader.impl.completer.SystemCompleter;
 import org.jline.utils.AttributedString;
-import org.springframework.stereotype.Component;
 
 import lombok.NoArgsConstructor;
 import picocli.CommandLine;
@@ -30,7 +29,7 @@ import picocli.CommandLine.Help;
 import picocli.CommandLine.Model.CommandSpec;
 import picocli.CommandLine.Model.OptionSpec;
 
-@Component @NoArgsConstructor
+@NoArgsConstructor
 public class ShellCommandRegistry implements CommandRegistry {
     private @NotNull Supplier<Path> workDir;
     private @NotNull CommandLine cmd;
