@@ -97,9 +97,6 @@ public class ShellCommand  implements Runnable, ExitCodeGenerator {
                     systemRegistry.cleanUp();
                     line = reader.readLine(prompt, rightPrompt, (MaskingCallback) null, null);
                     Object result = systemRegistry.execute(line);
-                    if (!"".equals(line) && null == result) {
-                        System.out.println(String.format("'%s' command not found", line));
-                    }
                 } catch (UserInterruptException e) {
                     // Ignore
                 } catch (EndOfFileException e) {
