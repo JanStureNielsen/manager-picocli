@@ -7,7 +7,8 @@ import picocli.CommandLine.Command;
 @Command(
     name = "create",
     mixinStandardHelpOptions = true,
-    header = "create stuff...")
+    header = "create stuff",
+    description = "Create some stuff with minimal fuss.")
 @Component
 class CreateCommand implements Runnable{
     @Override
