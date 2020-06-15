@@ -4,8 +4,6 @@ import java.io.PrintWriter;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-import javax.validation.constraints.NotNull;
-
 import org.fusesource.jansi.AnsiConsole;
 import org.jline.builtins.SystemRegistry;
 import org.jline.builtins.SystemRegistryImpl;
@@ -49,7 +47,6 @@ subcommands = {
 })
 @Component @RequiredArgsConstructor @Getter
 public class ShellCommand  implements Runnable, ExitCodeGenerator {
-    private final @NotNull ShellCommandRegistry commands;
     private LineReaderImpl reader;
     private PrintWriter out;
 
@@ -66,19 +63,19 @@ public class ShellCommand  implements Runnable, ExitCodeGenerator {
 
         AnsiConsole.systemInstall();
         try {
-            ShellCommandRegistry shellCommands = new ShellCommandRegistry(ShellCommand::workDir, cmd);
+            ShellCommandRegistry shellCommandRegistry = new ShellCommandRegistry(ShellCommand::workDir, cmd);
 
             Parser parser = new DefaultParser();
             Terminal terminal = TerminalBuilder.builder().build();
 
             SystemRegistry systemRegistry = new SystemRegistryImpl(parser, terminal, ShellCommand::workDir, null);
-            systemRegistry.setCommandRegistries(shellCommands);
+            systemRegistry.setCommandRegistries(shellCommandRegistry);
 
             LineReader reader = LineReaderBuilder.builder()
                     .terminal(terminal)
                     .completer(systemRegistry.completer())
                     .parser(parser)
-                    .variable(LineReader.LIST_MAX, 60)   // max tab completion candidates
+                    .variable(LineReader.LIST_MAX, 50)   // max tab completion candidates
                     .build();
 
             setReader(reader);
