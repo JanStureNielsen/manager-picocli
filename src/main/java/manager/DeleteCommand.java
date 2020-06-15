@@ -6,7 +6,7 @@ import picocli.CommandLine.Command;
 
 @Command(
     name = "delete",
-    description = "This is the long description, decribing in great detail what, how, and why it deletes stuff.",
+    description = "Deletes some stuff with minimal fuss...",
     mixinStandardHelpOptions = true)
 @Component
 class DeleteCommand implements Runnable{
