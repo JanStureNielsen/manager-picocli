@@ -14,7 +14,7 @@ import lombok.RequiredArgsConstructor;
 import picocli.AutoComplete;
 import picocli.CommandLine.Model.CommandSpec;
 
-@RequiredArgsConstructor //@Component
+@RequiredArgsConstructor
 public class ShellCommandCompleter implements Completer {
     private final @NotNull CommandSpec commandSpec;
 
