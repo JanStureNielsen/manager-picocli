@@ -20,8 +20,8 @@
     <artifactId>manager-picocli</artifactId>
     <packaging>jar</packaging>
 
-    <name>Manager picocli</name>
-    <description>Manager application.</description>
+    <name>Manager samplepicocli</name>
+    <description>Manager sample application with picocli, JLine, and Spring Boot.</description>
 
     <dependencies>
 
