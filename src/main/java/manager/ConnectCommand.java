@@ -40,8 +40,6 @@ public class ConnectCommand implements Runnable, ExitCodeGenerator {
 
     @Override
     public void run() {
-        System.out.println("Launching shell...");
-
         exitCode = new CommandLine(shell, picocliFactory).execute(new String[] {});
     }
 
