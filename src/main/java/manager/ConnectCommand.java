@@ -19,7 +19,8 @@ import picocli.CommandLine.Option;
     subcommands = {
         ListCommand.class,
         CreateCommand.class,
-        DeleteCommand.class
+        DeleteCommand.class,
+        HelpCommand.class
     })
 @Component @RequiredArgsConstructor
 public class ConnectCommand implements Runnable, ExitCodeGenerator {
