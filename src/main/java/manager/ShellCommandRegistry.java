@@ -49,10 +49,12 @@ public class ShellCommandRegistry implements CommandRegistry {
         }
     }
 
+    @Override
     public boolean hasCommand(String command) {
         return commands.contains(command) || aliasCommands.containsKey(command);
     }
 
+    @Override
     public SystemCompleter compileCompleters() {
         List<String> all = new ArrayList<>();
         all.addAll(commands);
