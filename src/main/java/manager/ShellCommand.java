@@ -77,6 +77,7 @@ public class ShellCommand  implements Runnable, ExitCodeGenerator {
             systemRegistry.setCommandRegistries(shellCommandRegistry);
 
             LineReader reader = LineReaderBuilder.builder()
+                    .appName("manager")
                     .terminal(terminal)
                     .completer(systemRegistry.completer())
                     .parser(parser)
