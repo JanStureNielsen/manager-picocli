@@ -43,7 +43,8 @@ footer = {"", "Press Ctl-D to exit."},
 subcommands = {
     ListCommand.class,
     CreateCommand.class,
-    DeleteCommand.class
+    DeleteCommand.class,
+    HelpCommand.class
 })
 @Component @RequiredArgsConstructor @Getter
 public class ShellCommand  implements Runnable, ExitCodeGenerator {
